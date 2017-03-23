@@ -3,6 +3,16 @@
 import re
 import scrapy
 
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
+
+def strip_scheme(url):
+    parsed = urlparse(url)
+    scheme = "%s://" % parsed.scheme
+    return parsed.geturl().replace(scheme, '', 1)
+
 def group(lst, n):
   for i in range(0, len(lst), n):
     val = lst[i:i+n]
@@ -26,8 +36,7 @@ class March26Spider(scrapy.Spider):
             full_url = "https://%s" % url
             return scrapy.Request(full_url, callback=self.parse_vk, meta={'city_name': city_name, 'url': url})
         elif "facebook.com" in url:
-            if not url.startswith("https://") and not url.startswith("http://"):
-                full_url = "https://%s" % url
+            full_url = "https://%s" % url
             return scrapy.Request(full_url, callback=self.parse_fb, meta={'city_name': city_name, 'url': url})
 
     def parse(self, response):
@@ -36,6 +45,8 @@ class March26Spider(scrapy.Spider):
         raw_cities = group(raw_cities, 8)
         print(raw_cities)
         for (_, _, city_name, _, link1, _, _, link2) in raw_cities:
+            link1 = strip_scheme(link1)
+            link2 = strip_scheme(link2)
             yield {
                 'type': 'wall',
                 'city_name': city_name,
@@ -94,7 +105,7 @@ class March26Spider(scrapy.Spider):
         body = response.body.decode("utf8")
         raw_counters = re.search(r"""((\d+)((\.){1}\d+[A-Z]?)?){1} Going&nbsp;\·&nbsp;((\d+)((\.){1}\d+[A-Z]?)?){1} Interested""", body, re.MULTILINE|re.IGNORECASE)
         if raw_counters:
-            stats['counters']['going'] = raw_counters.group(1)
+            stats['counters']['attending'] = raw_counters.group(1)
             stats['counters']['maybe'] = raw_counters.group(5)
 
         yield stats
