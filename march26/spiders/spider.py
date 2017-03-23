@@ -44,7 +44,7 @@ class March26Spider(scrapy.Spider):
         cities = []
 
         body = response.css('div.wall_post_text').extract()[0]
-        raw_cities = re.findall(u(r'((\d+)\.\s{1}([^\<]+)\s{1}\<a href=[\'"]?([^\'" >]+)[^>]+\>([^\<]+)\<\/a\>( и (\<a href=[\'"]?[^\'" >]+[^>]+\>([^\<]+)\<\/a\>))?)'), body, re.MULTILINE|re.IGNORECASE|re.UNICODE)
+        raw_cities = re.findall(u(r'((\d+)\.\s{1}([^\<]+)\s{1}\<a href=[\'"]?([^\'" >]+)[^>]+\>([^\<]+)\<\/a\>( \w (\<a href=[\'"]?[^\'" >]+[^>]+\>([^\<]+)\<\/a\>))?)'), body, re.MULTILINE|re.IGNORECASE|re.UNICODE)
         for (_, _, city_name, _, link1, _, _, link2) in raw_cities:
             link1 = strip_scheme(link1)
             link2 = strip_scheme(link2)
