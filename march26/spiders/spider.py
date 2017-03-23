@@ -104,7 +104,7 @@ class March26Spider(scrapy.Spider):
 
         # 18 Going&nbsp;·&nbsp;24 Interested
         body = response.body.decode("utf8")
-        raw_counters = re.search(u(r"((\d+)((\.){1}\d+[A-Z]?)?){1} Going&nbsp;\·&nbsp;((\d+)((\.){1}\d+[A-Z]?)?){1} Interested"), body, re.MULTILINE|re.IGNORECASE)
+        raw_counters = re.search(u(r'((\d+)((\.){1}\d+[A-Z]?)?){1} Going&nbsp;\u00B7&nbsp;((\d+)((\.){1}\d+[A-Z]?)?){1} Interested'), body, re.MULTILINE|re.IGNORECASE|re.UNICODE)
         if raw_counters:
             stats['counters']['attending'] = raw_counters.group(1)
             stats['counters']['maybe'] = raw_counters.group(5)
