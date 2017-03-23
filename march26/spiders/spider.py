@@ -42,7 +42,7 @@ class March26Spider(scrapy.Spider):
 
     def parse(self, response):
         cities = []
-        raw_cities = response.css('div.wall_post_text').re(r'((\d+)\.\s{1}([^\<]+)\s{1}\<a href=[\'"]?([^\'" >]+)[^>]+\>([^\<]+)\<\/a\>( и (\<a href=[\'"]?[^\'" >]+[^>]+\>([^\<]+)\<\/a\>))?)')
+        raw_cities = response.css('div.wall_post_text').re(u(r'((\d+)\.\s{1}([^\<]+)\s{1}\<a href=[\'"]?([^\'" >]+)[^>]+\>([^\<]+)\<\/a\>( и (\<a href=[\'"]?[^\'" >]+[^>]+\>([^\<]+)\<\/a\>))?)'))
         raw_cities = group(raw_cities, 8)
         print(raw_cities)
         for (_, _, city_name, _, link1, _, _, link2) in raw_cities:
