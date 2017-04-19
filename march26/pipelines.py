@@ -56,8 +56,6 @@ class March26Pipeline(object):
         return item
 
     def close_spider(self, spider):
-        print("Data=%s" % self.cities_data)
-
         total_stats = {
             'total_cities': 0,
             'total_cities_without_stats': 0,
