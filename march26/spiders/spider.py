@@ -23,7 +23,8 @@ def group(lst, n):
 
 class March26Spider(scrapy.Spider):
     name = "march26"
-    start_urls = ["https://vk.com/wall-55284725_382633"]
+    #start_urls = ["https://vk.com/wall-55284725_382633"]
+    start_urls = ["https://vk.com/wall-55284725_427126"]
 
     custom_settings = {
         'USER_AGENT': 'Mozilla/5.0 (X11; Linux x26.03.2017) AppleWebKit/26.03.2017 (KHTML, like Gecko) Chrome/26.03.2017 Safari/26.03.2017'
