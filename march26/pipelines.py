@@ -32,9 +32,20 @@ class March26Pipeline(object):
 
     def open_spider(self, spider):
         self.cities_data = {}
-
+        self.meta = {
+            'urls': spider.start_urls,
+            'extra': {
+                'text': '',
+                'url': '',
+            }
+        }
 
     def process_item(self, item, spider):
+        if item['type'] == 'extra':
+            self.meta['extra']['url'] = item['url']
+            self.meta['extra']['text'] = item['text']
+            return item
+
         city_name = item['city_name']
         if item['type'] == 'wall':
             links = []
@@ -52,6 +63,10 @@ class March26Pipeline(object):
         if item['type'] == 'stats':
             city = self.cities_data[city_name]
             city['counters'][item['url']] = item['counters']
+
+        if item['type'] == 'extra':
+            self.meta['extra']['url'] = item['url']
+            self.meta['extra']['text'] = item['text']
 
         return item
 
@@ -89,6 +104,7 @@ class March26Pipeline(object):
             'stats_by_city': self.cities_data,
             'cities_without_stats': cities_without_stats,
             'updated_time': datetime.datetime.utcnow(),
+            'meta': self.meta,
         }
 
         with open("stats.json", "w") as outfile:

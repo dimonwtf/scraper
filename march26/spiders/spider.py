@@ -57,6 +57,15 @@ class March26Spider(scrapy.Spider):
             if not self.is_event_link(link1) and not self.is_event_link(link2):
                 continue
 
+            # ignore P.S. Text
+            if city_name and city_name.startswith("P.S."):
+                yield {
+                    'type': 'extra',
+                    'text': 'Если кого забыли пишите ссылку в <a href="{comment_url}">комменты</a>, добавим. В список берём только встречи (о том, как создать и вести встречу тут: {url})',
+                    'url': link1
+                }
+                continue
+
             yield {
                 'type': 'wall',
                 'city_name': city_name,
